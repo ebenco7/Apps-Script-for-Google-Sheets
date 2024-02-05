@@ -1,0 +1,44 @@
+function modifyEditorsAndProtectSheet() {
+  // Get the active spreadsheet
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Get the active sheet
+  var activeSheet = spreadsheet.getActiveSheet();
+
+  // Get the name of the active sheet
+  var sheetName = activeSheet.getName();
+
+  // Duplicate the active sheet
+  var newSheet = activeSheet.copyTo(spreadsheet);
+
+  // Prompt user for the new sheet name
+  var newSheetName = SpreadsheetApp.getUi().prompt('Enter a new name for the duplicated sheet:')
+    .getResponseText();
+
+  // Rename the duplicated sheet
+  newSheet.setName(newSheetName);
+
+  // Get the duplicated sheet by name
+  var duplicatedSheet = spreadsheet.getSheetByName(newSheetName);
+
+  // Protect the duplicated sheet
+  var protection = duplicatedSheet.protect();
+
+  // Remove all existing editors
+  var existingEditors = protection.getEditors();
+  protection.removeEditors(existingEditors);
+
+  // Retain two specific editors (replace 'editor1@gmail.com' and 'editor2@gmail.com' with the actual emails)
+  protection.addEditor('yourname@gmail.com');
+  protection.addEditor('yourname@gmail.com');
+
+  // Prompt user for the new email to add as an editor
+  var newEditorEmail = SpreadsheetApp.getUi().prompt('Enter the new email to add as an editor:')
+    .getResponseText();
+
+  // Add the new email as an editor to the protected sheet
+  protection.addEditor(newEditorEmail);
+
+  // Inform the user that the sheet has been duplicated, renamed, protected, and edited
+  SpreadsheetApp.getUi().alert('Sheet duplicated, renamed, protected, and edited successfully!');
+}
